@@ -1,7 +1,7 @@
 # dda-cloudspec
 
 # rationale
-After the test driven validation of servers has been accomplished (e.g. with rspec & ServerSpec / Goss ), what is missing is the validation of the whole cloud - a CloudSpec.
+After the test driven provisioning of servers has been accomplished (e.g. with rspec & ServerSpec / Goss ), what is missing is the validation of the whole cloud - a CloudSpec.
 
 ## Possible Areas of Application:
 * Are DNS-entries set correctly
@@ -13,7 +13,6 @@ After the test driven validation of servers has been accomplished (e.g. with rsp
 How would it be if we could employ a kind of probe somewhere in the cloud and this probe could then test the network connections and similar areas?
 
 ## What tools are already available for this?
-
 There is mostly AWS Spec - <https://github.com/k1LoW/awspec>
 AWS Spec is testing on a low-level, and might be suitable in the cases where terraform can not be trusted.
 
@@ -25,14 +24,12 @@ AWS Spec is testing on a low-level, and might be suitable in the cases where ter
 * possibly http: curl
 
 ## At which point could a CloudSpec-test be executed?
-
 * At the time of deployment: Here the deployment-target can be used as a probe.
 * As a singular standalone-test: A small instance can be instantiated as its own probe and on it a few tests can be run. The instance is then destroyed after the test.
 * As a permanent monitoring: A small instance can be instantiated as its own probe and on it a few tests are run cyclical. Possible the telegraf server agent could be added to the probe.
 
 
 ## How could one realize such a test?
-
 We use a ServerTest-tool, which executes nmap, netcat and nslookup.
 The different time points of execution additionally need different modes:
 
@@ -42,15 +39,13 @@ The different time points of execution additionally need different modes:
 
 ## Basis
 <https://github.com/DomainDrivenArchitecture/dda-serverspec-crate>
+
 Can test local and remote. In the remote- case only the tools on the target are required. The test runtime environment needs a jdk.
 The tool can be started in this way:
 java -jar dda-serverspec-crate.jar --spec specfile.yaml
 Also thinkable: serverspec & rake
 
 ## See also:
-
--> zips oder binaries in github hinterlegen
-
 $ nc wkewkjdwjdw.de 80
 nc: getaddrinfo: Name or service not known
 
