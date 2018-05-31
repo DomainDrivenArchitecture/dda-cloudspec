@@ -1,0 +1,4 @@
+{
+ hello (println "Hello World!")
+
+ hello2 #$ ["echo" "Hello" "World!"]}
