@@ -14,4 +14,3 @@ pom.xml.asc
 .mach
 **/terraform.tfstate*
 **/.terraform
-/build

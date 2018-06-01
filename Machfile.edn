@@ -1,4 +1,4 @@
-{mach/props [build-dir "build"
+{mach/props [build-dir "target"
              terraform-build-dir (str build-dir "/terraform")
              main-src-dir "main"
              terraform-main-src-dir (str main-src-dir "/terraform")]
