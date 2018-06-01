@@ -1,2 +1,3 @@
 {
- mach/import [["https://github.com/DomainDrivenArchitecture/dda-cloudspec/blob/master/mach_extensions/terraform.edn"]]}
+ mach/import [["https://raw.githubusercontent.com/DomainDrivenArchitecture/dda-cloudspec/master/mach_extensions/terraform.edn"]]}
+ ;mach/import [[common.edn]]}

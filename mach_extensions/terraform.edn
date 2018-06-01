@@ -1,5 +1,5 @@
 {
- mach/import [["https://github.com/DomainDrivenArchitecture/dda-cloudspec/blob/master/mach_extensions/common.edn"]]
+ mach/import [["https://raw.githubusercontent.com/DomainDrivenArchitecture/dda-cloudspec/master/mach_extensions/common.edn"]]
 
  mach/props [terraform-build-dir (str build-dir "/terraform")
              terraform-main-src-dir (str main-src-dir "/terraform")]
