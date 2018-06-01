@@ -1,9 +1,4 @@
 {
- mach/props [build-dir "target"
-             main-src-dir "main"
-             terraform-build-dir (str build-dir "/terraform")
-             terraform-main-src-dir (str main-src-dir "/terraform")]
-
  mk-terraform-build-dir
   {depends [mk-build-dir]
    product terraform-build-dir
