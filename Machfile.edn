@@ -3,12 +3,13 @@
               main-src-dir "main"
               terraform-build-dir (str build-dir "/terraform")
               terraform-main-src-dir (str main-src-dir "/terraform")]
-  mach/import [["https://raw.githubusercontent.com/DomainDrivenArchitecture/dda-cloudspec/master/mach_extensions/common.edn" {build-dir build-dir
-                                                                                                                              main-src-dir main-src-dir}]]
-  mach/import [["https://raw.githubusercontent.com/DomainDrivenArchitecture/dda-cloudspec/master/mach_extensions/terraform.edn" {build-dir build-dir
-                                                                                                                                 main-src-dir main-src-dir
-                                                                                                                                 terraform-build-dir terraform-build-dir
-                                                                                                                                 terraform-main-src-dir terraform-main-src-dir}]]}
+
+  mach/import [["https://raw.githubusercontent.com/DomainDrivenArchitecture/dda-cloudspec/master/mach_extensions/common.edn" {build-dir "target"
+                                                                                                                              main-src-dir "main"}]
+               ["https://raw.githubusercontent.com/DomainDrivenArchitecture/dda-cloudspec/master/mach_extensions/terraform.edn" {build-dir "target"
+                                                                                                                                 main-src-dir "main"
+                                                                                                                                 terraform-build-dir (str build-dir "/terraform")
+                                                                                                                                 terraform-main-src-dir (str main-src-dir "/terraform")}]]}
 
 
  ;mach/import [[common.edn]]}

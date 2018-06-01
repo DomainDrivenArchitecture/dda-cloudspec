@@ -1,4 +1,7 @@
 {
+ mach/props [build-dir "target"
+             main-src-dir "main"]
+
  mk-build-dir
   {product build-dir
    novelty (not (mach.core/file-exists? product))
