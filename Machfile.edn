@@ -1,4 +1,51 @@
-{
- hello (println "Hello World!")
+{mach/props [build-dir "build"
+             terraform-build-dir (str build-dir "/terraform")
+             main-src-dir "main"
+             terraform-main-src-dir (str main-src-dir "/terraform")]
 
- hello2 #$ ["echo" "Hello" "World!"]}
+ mk-build-dir
+  {product build-dir
+   novelty (not (mach.core/file-exists? product))
+   update! #$ ["mkdir" product]
+   clean! #$ ["rmdir" product]}
+
+ mk-terraform-build-dir
+  {depends [mk-build-dir]
+   product terraform-build-dir
+   novelty (not (mach.core/file-exists? product))
+   update! #$ ["mkdir" product]
+   clean! #$ ["rmdir" product]}
+
+ prepare-terraform-build-dir
+  {depends [mk-terraform-build-dir]
+   product terraform-build-dir
+   novelty (mach.core/modified-since product terraform-main-src-dir)
+   update! #$ ["cp" "-r" (str terraform-main-src-dir "/*") product]
+   clean! #$ ["rm" "-rf" (str product "/*")]}
+
+ terraform-init
+  {depends [prepare-terraform-build-dir]
+   product (str terraform-build-dir "/.terraform")
+   novelty (or
+             (not (mach.core/file-exists? product))
+             (mach.core/modified-since product terraform-main-src-dir))
+   update! #$ ["cd" terraform-build-dir "&&"
+               "terraform" "init"] ;">" "/dev/null"
+   clean! #$ ["rm" "-rf" product]}
+
+ terraform-plan
+  {depends [terraform-init]
+   product (str terraform-build-dir "/proposed.plan")
+   update! #$ ["cd" terraform-build-dir "&&"
+               "terraform" "plan" "-out" product]
+   clean! #$ ["rm" product]}
+
+ terraform-apply
+  {update! #$ ["cd" terraform-build-dir "&&"
+               "terraform" "apply" #ref [plan product]]}
+
+ not-working-remote-config #$ ["terraform" "remote" "config" "-backend=s3" (str "-backend-config=\"bucket=" bucket "\"")  "-backend-config=\"key=terraform.tfstate\"" "-backend-config=\"region=eu-west-1\"" "-backend-config=\"encrypt=true\"" (if (not-empty aws-profile) (str "-backend-config=\"profile=" aws-profile "\"") "")]
+
+ not-working-plan-destroy #$ ["terraform" "plan" "-destroy" (for [f configs] ["-var-file" f])]
+
+ not-working-destroy #$ ["terraform" "destroy" (for [f configs] ["-var-file" f])]}
