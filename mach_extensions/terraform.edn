@@ -1,16 +1,8 @@
 {
- mach/import [["https://raw.githubusercontent.com/juxt/mach/master/extensions/aws.mach.edn" ]]
+ mach/import [["https://github.com/DomainDrivenArchitecture/dda-cloudspec/blob/master/mach_extensions/common.edn"]]
 
- mach/props [build-dir "target"
-             terraform-build-dir (str build-dir "/terraform")
-             main-src-dir "main"
+ mach/props [terraform-build-dir (str build-dir "/terraform")
              terraform-main-src-dir (str main-src-dir "/terraform")]
-
- mk-build-dir
-  {product build-dir
-   novelty (not (mach.core/file-exists? product))
-   update! #$ ["mkdir" product]
-   clean! #$ ["rmdir" product]}
 
  mk-terraform-build-dir
   {depends [mk-build-dir]
