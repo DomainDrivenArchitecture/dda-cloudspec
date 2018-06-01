@@ -41,7 +41,8 @@
    clean! #$ ["rm" product]}
 
  terraform-apply
-  {product (str terraform-build-dir "/output.json")
+  {depends [terraform-plan]
+   product (str terraform-build-dir "/output.json")
    update! #$ ["cd" terraform-build-dir "&&"
                "terraform" "apply" "-auto-approve" "-input=false" "proposed.plan" "&&"
                "terraform" "output" "-json" ">" "output.json"]
@@ -55,6 +56,11 @@
    clean! #$ ["rm" product]}
 
  terraform-destroy
-  {depends [terraform-apply]}
+  {depends [terraform-plan-destroy]
+   product (str terraform-build-dir "/output.json")
+   update! #$ ["cd" terraform-build-dir "&&"
+               "terraform" "apply" "-auto-approve" "-input=false" "proposed.plan" "&&"
+               "echo ''" ">" "output.json"]
+   clean! #$ ["rm" product]}
 
  not-working-remote-config #$ ["terraform" "remote" "config" "-backend=s3" (str "-backend-config=\"bucket=" bucket "\"")  "-backend-config=\"key=terraform.tfstate\"" "-backend-config=\"region=eu-west-1\"" "-backend-config=\"encrypt=true\"" (if (not-empty aws-profile) (str "-backend-config=\"profile=" aws-profile "\"") "")]}
