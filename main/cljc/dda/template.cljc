@@ -24,8 +24,6 @@ smeagol.include and not inteded for direct usage."
       (let [parse (first parse-results)
             replace (nth parse 1)
             value (get value-map (nth parse 2))]
-        (println value-map)
-        (println value)
         (recur
           (cs/replace
            result
