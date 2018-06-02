@@ -82,12 +82,12 @@
              (println
                (let [r (cognitect.transit/reader :json)]
                  (cognitect.transit/read r
-                   (lumo.io/slurp "test/resources/output.json")))))}}
-             ; (lumo.io/spit
-             ;   product
-             ;   (dda.cloudspec.template/render
-             ;     "ip: {{ip}} >"
-             ;     {"ip" "1234"})))}
+                   (lumo.io/slurp "test/resources/output.json"))))
+             (lumo.io/spit
+               product
+               (dda.template/render
+                 "ip: {{ip}} >"
+                 {"ip" "1234"})))}}
 
 test-read-json
  {update! (do
