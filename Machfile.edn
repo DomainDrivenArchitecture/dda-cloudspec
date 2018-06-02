@@ -1,4 +1,7 @@
 {
+  mach/dependencies [[hbs "1.0.1"]
+                     [com.cognitect/transit-cljs "0.8.256"]]
+
   mach/props [build-dir "target"
               main-src-dir "main"
               terraform-build-dir (str build-dir "/terraform")
@@ -63,5 +66,17 @@
                "terraform" "apply" "-auto-approve" "-input=false" "proposed.plan" "&&"
                "echo ''" ">" "output.json"]
    clean! #$ ["rm" product]}
+
+ generate-pallet-targets
+  {update! (do
+             (println (lumo.io/slurp "test/resources/output.json"))
+             (println
+               (js->clj
+                 (.parse js/JSON
+                   (lumo.io/slurp "test/resources/output.json"))))
+             (println
+               (let [r (cognitect.transit/reader :json)]
+                 (cognitect.transit/read r
+                   (lumo.io/slurp "test/resources/output.json")))))}
 
  not-working-remote-config #$ ["terraform" "remote" "config" "-backend=s3" (str "-backend-config=\"bucket=" bucket "\"")  "-backend-config=\"key=terraform.tfstate\"" "-backend-config=\"region=eu-west-1\"" "-backend-config=\"encrypt=true\"" (if (not-empty aws-profile) (str "-backend-config=\"profile=" aws-profile "\"") "")]}
