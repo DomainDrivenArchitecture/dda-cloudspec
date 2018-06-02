@@ -79,15 +79,16 @@
   {depends [mk-pallet-build-dir]
    product (str dda-pallet-build-dir "/targets.edn")
    update! (do
-             (println
-               (let [r (cognitect.transit/reader :json)]
+             (let [r (cognitect.transit/reader :json)]
+               (println
                  (cognitect.transit/read r
-                   (lumo.io/slurp "test/resources/output.json"))))
-             (lumo.io/spit
-               product
-               (dda.template/render
-                 "ip: {{ip}} >"
-                 {"ip" "1234"})))}}
+                   (lumo.io/slurp "test/resources/output.json")))
+               (lumo.io/spit
+                 product
+                 (dda.template/render
+                   "ip: {{instance_public_ip}} "
+                   (cognitect.transit/read r
+                     (lumo.io/slurp "test/resources/output.json"))))))}}
 
 test-read-json
  {update! (do
