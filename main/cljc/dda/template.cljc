@@ -2,7 +2,7 @@
 list & heading indents of includes. This namespaces is implementation detail for
 smeagol.include and not inteded for direct usage."
       :author "Michael Jerger"}
-  dda.cloudspec.template
+  dda.template
   (:require
     [clojure.string :as cs]))
 

@@ -21,7 +21,7 @@
                    :source-paths ["main/cljc" "test/cljs"]
                    :compiler {:output-to "target/cljs-tests.js"
                               :output-dir "target"
-                              :main cloudspec-test-runner
+                              :main dda.cloudspec-test-runner
                               :optimizations :none
                               :target :nodejs}}}}
   :profiles {:dev {:source-paths ["test/cljs"]

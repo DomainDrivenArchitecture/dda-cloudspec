@@ -1,6 +1,6 @@
-(ns dda.cloudspec.template-test
+(ns dda.template-test
   (:require [cljs.test :refer [deftest testing is]]
-            [dda.cloudspec.template :as sut]))
+            [dda.template :as sut]))
 
 (deftest test-parse-stencils
   (testing

@@ -1,11 +1,12 @@
 {
-  mach/dependencies [[hbs "1.0.1"]
+  mach/dependencies [[dda/dda-cloudspec "0.1.0-SNAPSHOT"]
                      [com.cognitect/transit-cljs "0.8.256"]]
 
   mach/props [build-dir "target"
               main-src-dir "main"
               terraform-build-dir (str build-dir "/terraform")
-              terraform-main-src-dir (str main-src-dir "/terraform")]
+              terraform-main-src-dir (str main-src-dir "/terraform")
+              dda-pallet-build-dir (str build-dir "/dda_pallet")]
 
  mk-build-dir
   {product build-dir
@@ -16,6 +17,13 @@
  mk-terraform-build-dir
   {depends [mk-build-dir]
    product terraform-build-dir
+   novelty (not (mach.core/file-exists? product))
+   update! #$ ["mkdir" product]
+   clean! #$ ["rmdir" product]}
+
+ mk-pallet-build-dir
+  {depends [mk-build-dir]
+   product dda-pallet-build-dir
    novelty (not (mach.core/file-exists? product))
    update! #$ ["mkdir" product]
    clean! #$ ["rmdir" product]}
@@ -68,15 +76,30 @@
    clean! #$ ["rm" product]}
 
  generate-pallet-targets
-  {update! (do
-             (println (lumo.io/slurp "test/resources/output.json"))
-             (println
-               (js->clj
-                 (.parse js/JSON
-                   (lumo.io/slurp "test/resources/output.json"))))
+  {depends [mk-pallet-build-dir]
+   product (str dda-pallet-build-dir "/targets.edn")
+   update! (do
              (println
                (let [r (cognitect.transit/reader :json)]
                  (cognitect.transit/read r
-                   (lumo.io/slurp "test/resources/output.json")))))}
+                   (lumo.io/slurp "test/resources/output.json")))))}}
+             ; (lumo.io/spit
+             ;   product
+             ;   (dda.cloudspec.template/render
+             ;     "ip: {{ip}} >"
+             ;     {"ip" "1234"})))}
 
- not-working-remote-config #$ ["terraform" "remote" "config" "-backend=s3" (str "-backend-config=\"bucket=" bucket "\"")  "-backend-config=\"key=terraform.tfstate\"" "-backend-config=\"region=eu-west-1\"" "-backend-config=\"encrypt=true\"" (if (not-empty aws-profile) (str "-backend-config=\"profile=" aws-profile "\"") "")]}
+test-read-json
+ {update! (do
+            (println (lumo.io/slurp "test/resources/output.json"))
+            (println
+              (js->clj
+                (.parse js/JSON
+                  (lumo.io/slurp "test/resources/output.json"))
+                :keywordize true))
+            (println
+              (let [r (cognitect.transit/reader :json)]
+                (cognitect.transit/read r
+                  (lumo.io/slurp "test/resources/output.json")))))}
+
+ not-working-remote-config #$ ["terraform" "remote" "config" "-backend=s3" (str "-backend-config=\"bucket=" bucket "\"")  "-backend-config=\"key=terraform.tfstate\"" "-backend-config=\"region=eu-west-1\"" "-backend-config=\"encrypt=true\"" (if (not-empty aws-profile) (str "-backend-config=\"profile=" aws-profile "\"") "")]
