@@ -31,5 +31,5 @@ mv terraform /usr/local/bin/
 ## usage
 ```
 mach execute-serverspec # tf apply & serverspec
-mach terraform-destroy  # destroy server test
+mach terraform-destroy  # destroy server after test
 ```
