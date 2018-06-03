@@ -78,17 +78,10 @@
  generate-pallet-targets
   {depends [mk-pallet-build-dir]
    product (str dda-pallet-build-dir "/targets.edn")
-   update! (do
-             (let [r (cognitect.transit/reader :json)]
-               (println
-                 (cognitect.transit/read r
-                   (lumo.io/slurp "test/resources/output.json")))
-               (lumo.io/spit
-                 product
-                 (dda.template/render
-                   "ip: {{[instance_public_ip value]}} "
-                   (cognitect.transit/read r
-                     (lumo.io/slurp "test/resources/output.json"))))))}}
+   update! (dda.template-js/generate-with-terraform-output
+                (lumo.io/resource "templates/targets.edn.templ")
+                "test/resources/output.json"
+                product)}}
 
 test-read-json
  {update! (do
