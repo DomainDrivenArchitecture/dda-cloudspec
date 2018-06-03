@@ -48,31 +48,31 @@
 
  terraform-plan
   {depends [terraform-get]
-   product (str terraform-build-dir "/proposed.plan")
+   product (str terraform-build-dir "/proposed_apply.plan")
    update! #$ ["cd" terraform-build-dir "&&"
-               "terraform" "plan" "-out" "proposed.plan"]
+               "terraform" "plan" "-out" "proposed_apply.plan"]
    clean! #$ ["rm" product]}
 
  terraform-apply
   {depends [terraform-plan]
    product (str terraform-build-dir "/output.json")
    update! #$ ["cd" terraform-build-dir "&&"
-               "terraform" "apply" "-auto-approve" "-input=false" "proposed.plan" "&&"
+               "terraform" "apply" "-auto-approve" "-input=false" "proposed_apply.plan" "&&"
                "terraform" "output" "-json" ">" "output.json"]
    clean! #$ ["rm" product]}
 
  terraform-plan-destroy
   {depends [terraform-get]
-   product (str terraform-build-dir "/proposed.plan")
+   product (str terraform-build-dir "/proposed_destroy.plan")
    update! #$ ["cd" terraform-build-dir "&&"
-               "terraform" "plan" "-destroy" "-out" "proposed.plan"]
+               "terraform" "plan" "-destroy" "-out" "proposed_destroy.plan"]
    clean! #$ ["rm" product]}
 
  terraform-destroy
   {depends [terraform-plan-destroy]
    product (str terraform-build-dir "/output.json")
    update! #$ ["cd" terraform-build-dir "&&"
-               "terraform" "apply" "-auto-approve" "-input=false" "proposed.plan" "&&"
+               "terraform" "apply" "-auto-approve" "-input=false" "proposed_destroy.plan" "&&"
                "echo ''" ">" "output.json"]
    clean! #$ ["rm" product]}
 
@@ -99,7 +99,7 @@
                "https://github.com/DomainDrivenArchitecture/dda-serverspec-crate/releases/download/1.0.5/dda-serverspec-crate-1.0.5-standalone.jar"]}
 
  execute-serverspec
-  {depends [prepare-pallet-build-dir terraform-apply generate-pallet-targets prepare-serverspec]
+  {depends [prepare-serverspec generate-pallet-targets terraform-apply prepare-pallet-build-dir]
    update! #$ ["java" "-jar" (str dda-pallet-build-dir "/serverspec.jar")
                        "-t" (str dda-pallet-build-dir "/targets.edn")
                        (str dda-pallet-build-dir "/serverspec.edn")]}}
