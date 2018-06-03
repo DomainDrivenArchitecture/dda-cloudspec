@@ -3,8 +3,8 @@
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
             :url "https://www.apache.org/licenses/LICENSE-2.0.html"}
-  :dependencies []
-  :source-paths ["main/cljc"]
+  :dependencies [[com.cognitect/transit-cljs "0.8.256"]]
+  :source-paths ["main/cljs" "main/cljc"]
   :resource-paths ["main/resources"]
   :repositories [["snapshots" :clojars]
                  ["releases" :clojars]]
