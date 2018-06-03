@@ -6,6 +6,7 @@
               main-src-dir "main"
               terraform-build-dir (str build-dir "/terraform")
               terraform-main-src-dir (str main-src-dir "/terraform")
+              dda-pallet-main-src-dir (str main-src-dir "/dda_pallet")
               dda-pallet-build-dir (str build-dir "/dda_pallet")]
 
  mk-build-dir
@@ -42,7 +43,7 @@
              (not (mach.core/file-exists? product))
              (mach.core/modified-since product terraform-main-src-dir))
    update! #$ ["cd" terraform-build-dir "&&"
-               "terraform" "get"] ;">" "/dev/null"
+               "terraform" "init"] ;">" "/dev/null"
    clean! #$ ["rm" "-rf" product]}
 
  terraform-plan
@@ -75,25 +76,46 @@
                "echo ''" ">" "output.json"]
    clean! #$ ["rm" product]}
 
+ prepare-pallet-build-dir
+  {depends [mk-pallet-build-dir]
+   product dda-pallet-build-dir
+   novelty (mach.core/modified-since product dda-pallet-main-src-dir)
+   update! #$ ["cp" "-r" (str dda-pallet-main-src-dir "/*") product]
+   clean! #$ ["rm" "-rf" (str product "/*")]}
+
  generate-pallet-targets
   {depends [mk-pallet-build-dir]
    product (str dda-pallet-build-dir "/targets.edn")
    update! (dda.template-js/generate-with-terraform-output
                 (lumo.io/resource "templates/targets.edn.templ")
-                "test/resources/output.json"
-                product)}}
+                (str terraform-build-dir "/output.json") ;; TODO use ref instead of
+                product)}
+
+ prepare-serverspec
+  {depends [mk-pallet-build-dir]
+   product (str dda-pallet-build-dir "/serverspec.jar")
+   novelty (not (mach.core/file-exists? product))
+   update! #$ ["curl" "-L" "-o" product
+               "https://github.com/DomainDrivenArchitecture/dda-serverspec-crate/releases/download/1.0.5/dda-serverspec-crate-1.0.5-standalone.jar"]}
+
+ execute-serverspec
+  {depends [prepare-pallet-build-dir terraform-apply generate-pallet-targets prepare-serverspec]
+   update! #$ ["java" "-jar" (str dda-pallet-build-dir "/serverspec.jar")
+                       "-t" (str dda-pallet-build-dir "/targets.edn")
+                       (str dda-pallet-build-dir "/serverspec.edn")]}}
+
 
 test-read-json
- {update! (do
-            (println (lumo.io/slurp "test/resources/output.json"))
-            (println
-              (js->clj
-                (.parse js/JSON
-                  (lumo.io/slurp "test/resources/output.json"))
-                :keywordize true))
-            (println
-              (let [r (cognitect.transit/reader :json)]
-                (cognitect.transit/read r
-                  (lumo.io/slurp "test/resources/output.json")))))}
+{update! (do
+           (println (lumo.io/slurp "test/resources/output.json"))
+           (println
+             (js->clj
+               (.parse js/JSON
+                 (lumo.io/slurp "test/resources/output.json"))
+               :keywordize true))
+           (println
+             (let [r (cognitect.transit/reader :json)]
+               (cognitect.transit/read r
+                 (lumo.io/slurp "test/resources/output.json")))))}
 
- not-working-remote-config #$ ["terraform" "remote" "config" "-backend=s3" (str "-backend-config=\"bucket=" bucket "\"")  "-backend-config=\"key=terraform.tfstate\"" "-backend-config=\"region=eu-west-1\"" "-backend-config=\"encrypt=true\"" (if (not-empty aws-profile) (str "-backend-config=\"profile=" aws-profile "\"") "")]
+not-working-remote-config #$ ["terraform" "remote" "config" "-backend=s3" (str "-backend-config=\"bucket=" bucket "\"")  "-backend-config=\"key=terraform.tfstate\"" "-backend-config=\"region=eu-west-1\"" "-backend-config=\"encrypt=true\"" (if (not-empty aws-profile) (str "-backend-config=\"profile=" aws-profile "\"") "")]

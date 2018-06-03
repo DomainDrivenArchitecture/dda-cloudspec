@@ -1,0 +1,12 @@
+{:netstat [{:process-name "sshd" :port "11" :running? false}  ;check if sshd is NOT running on port 11
+           {:process-name "sshd" :port "22"}         ;check if sshd is running on port 22
+           {:process-name "sshd" :port "22" :exp-proto "tcp6" :ip "::"}]
+ :file [{:path "/root/.bashrc"}                      ;check if file exists
+        {:path "/etc"}                               ;check if folder exists
+        {:path "/absent" :exist? false}]             ;check if file doesn't exists
+ :netcat [{:host "www.google.com" :port 80}          ;check if host is reachable
+          {:host "www.google.c" :port 80 :reachable? false}]
+ :package [{:name "test" :installed? false}          ; check if package test is NOT installed
+           {:name "nano"}]                           ; check if package nano is installed
+ :http [{:url "https://domaindrivenarchitecture.org" ;provide full url
+         :expiration-days 15}]}
