@@ -31,8 +31,11 @@
               "{{symbol2}}"
               "symbol2"])
            (sut/parse-stencil "Some {{symbol-to-replace}} surounding text
-more {{symbol2}} x {{symbol2}} should be distinct.")))))
-
+more {{symbol2}} x {{symbol2}} should be distinct.")))
+    (is (= '(["Some {{[path1 path2]}} surounding text"
+              "{{[path1 path2]}}"
+              "[path1 path2]"])
+           (sut/parse-stencil "Some {{[path1 path2]}} surounding text")))))
 
 (deftest test-render
   (testing
@@ -50,4 +53,8 @@ more bar x bar should be distinct."
              "Some {{symbol-to-replace}} surounding text
 more {{symbol2}} x {{symbol2}} should be distinct."
              {"symbol-to-replace" "foo"
-              "symbol2" "bar"})))))
+              "symbol2" "bar"})))
+    (is (= "Some foo surounding text"
+           (sut/render
+             "Some {{[path1 path2]}} surounding text"
+             {"path1" {"path2" "foo"}})))))

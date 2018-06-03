@@ -25,7 +25,9 @@ smeagol.include and not inteded for direct usage."
   parse-stencil
   [template]
   (distinct
-    (re-seq #".*(\{\{\s*(\S+)\s*\}\}).*" template)))
+    (into
+      (re-seq #".*(\{\{\s*(\S+)\s*\}\}).*" template)
+      (re-seq #".*(\{\{\s*(\[.+\])\s*\}\}).*" template))))
 
 (defn
   render
@@ -36,14 +38,23 @@ smeagol.include and not inteded for direct usage."
     (if (empty? parse-results)
       result
       (let [parse (first parse-results)
-            replace (nth parse 1)
-            value (get value-map (nth parse 2))]
-        (recur
-          (cs/replace
-           result
-           (re-pattern (cs/escape
-                         replace
-                         {\{ "\\{"
-                          \} "\\}"}))
-           value)
-          (rest parse-results))))))
+            replace
+              (re-pattern (cs/escape
+                            (nth parse 1)
+                            {\{ "\\{"
+                             \} "\\}"
+                             \[ "\\["
+                             \] "\\]"}))
+            raw-path (nth parse 2)
+            path (if (cs/starts-with? raw-path "[")
+                     (filter
+                       (fn [element] (not (cs/blank? element)))
+                       (cs/split raw-path #"[\[\]\s]"))
+                     (vector raw-path))
+            value (get-in value-map path)]
+       (recur
+         (cs/replace
+          result
+          replace
+          value)
+         (rest parse-results))))))
