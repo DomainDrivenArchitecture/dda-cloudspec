@@ -86,7 +86,7 @@
                (lumo.io/spit
                  product
                  (dda.template/render
-                   "ip: {{instance_public_ip}} "
+                   "ip: {{[instance_public_ip value]}} "
                    (cognitect.transit/read r
                      (lumo.io/slurp "test/resources/output.json"))))))}}
 
