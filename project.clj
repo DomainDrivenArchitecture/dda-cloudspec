@@ -1,4 +1,4 @@
-(defproject dda/dda-cloudspec "0.1.0-SNAPSHOT"
+(defproject dda/dda-cloudspec "0.1.0"
   :description "Tools for operating dda-cloudspec"
   :url "https://domaindrivenarchitecture.org"
   :license {:name "Apache License, Version 2.0"
