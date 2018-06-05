@@ -1,0 +1,10 @@
+{
+ breaking
+  {update! #$ ["exit" 1]}
+
+ non-breaking
+  {update! #$ ["exit" 0]}
+
+ dependand
+  {depends [breaking non-breaking]
+   update! #$ ["echo" "should not be reached"]}}
