@@ -1,5 +1,5 @@
 {
-  mach/dependencies [[dda/dda-cloudspec "0.1.0-SNAPSHOT"]
+  mach/dependencies [[dda/dda-cloudspec "0.1.0"]
                      [com.cognitect/transit-cljs "0.8.256"]]
 
   mach/props [build-dir "target"

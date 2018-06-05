@@ -1,4 +1,7 @@
 # dda-cloudspec
+[![Clojars Project](https://img.shields.io/clojars/v/dda/dda-cloudspec.svg)](https://clojars.org/dda/dda-cloudspec)
+
+[![Slack](https://img.shields.io/badge/chat-clojurians-green.svg?style=flat)](https://clojurians.slack.com/messages/#dda-pallet/) | [<img src="https://domaindrivenarchitecture.org/img/meetup.svg" width=50 alt="DevOps Hacking with Clojure Meetup"> DevOps Hacking with Clojure](https://www.meetup.com/de-DE/preview/dda-pallet-DevOps-Hacking-with-Clojure) | [Website & Blog](https://domaindrivenarchitecture.org)
 
 ## preparation
 ### install mach
