@@ -12,4 +12,5 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns dda)
+(ns ^{:doc "Empty name namespace for mach autorequres."
+      :author "Michael Jerger"} dda)

@@ -12,16 +12,15 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns ^{:doc "Functions related to the include of markdown-paged - handling the
-list & heading indents of includes. This namespaces is implementation detail for
-smeagol.include and not inteded for direct usage."
+(ns ^{:doc "Functions for a stencil like templating."
       :author "Michael Jerger"}
   dda.template
   (:require
     [clojure.string :as cs]))
 
 
-(defn
+(defn ^{:doc "Parses stencils like {{key}} or {{[key1 key2 ...]}} and retunrs a distinct
+sequence of vectors containing [recognized line, the whole {{}} expresion to be replaced, key-expression]"}
   parse-stencil
   [template]
   (distinct
@@ -29,7 +28,7 @@ smeagol.include and not inteded for direct usage."
       (re-seq #".*(\{\{\s*(\S+)\s*\}\}).*" template)
       (re-seq #".*(\{\{\s*(\[.+\])\s*\}\}).*" template))))
 
-(defn
+(defn ^{:doc "renders a stencils like template and replaces {{key}} or {{[key1 key2 ...]}} with given value-map values."}
   render
   [template
    value-map]

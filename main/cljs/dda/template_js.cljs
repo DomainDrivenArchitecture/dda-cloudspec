@@ -12,9 +12,7 @@
 ;; See the License for the specific language governing permissions and
 ;; limitations under the License.
 
-(ns ^{:doc "Functions related to the include of markdown-paged - handling the
-list & heading indents of includes. This namespaces is implementation detail for
-smeagol.include and not inteded for direct usage."
+(ns ^{:doc "Functions to get terraform fill output.json into a given template."
       :author "Michael Jerger"}
   dda.template-js
   (:require
@@ -22,18 +20,15 @@ smeagol.include and not inteded for direct usage."
     [cognitect.transit :as trs]
     [lumo.io :as io]))
 
-(defn
+(defn ^{:doc "Gets the template either from disk or classpath and fills in valuse from terraform output. The result is written to generate-to-path."}
   generate-with-terraform-output
   [template-path
-   tf-output-path
+   tf-output
    generate-to-path]
   (let [r (trs/reader :json)]
-    (println
-      (trs/read r
-        (io/slurp tf-output-path)))
     (io/spit
       generate-to-path
       (tpl/render
         (io/slurp template-path)
         (trs/read r
-          (io/slurp tf-output-path))))))
+          (io/slurp tf-output))))))
