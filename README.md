@@ -3,6 +3,16 @@
 
 [![Slack](https://img.shields.io/badge/chat-clojurians-green.svg?style=flat)](https://clojurians.slack.com/messages/#dda-pallet/) | [<img src="https://domaindrivenarchitecture.org/img/meetup.svg" width=50 alt="DevOps Hacking with Clojure Meetup"> DevOps Hacking with Clojure](https://www.meetup.com/de-DE/preview/dda-pallet-DevOps-Hacking-with-Clojure) | [Website & Blog](https://domaindrivenarchitecture.org)
 
+## Features
+dda-cloudpec can test whole infrastructures, clouds and networks. It provides a close integration with terraform to instantiate probes and dda-serverspec a remote testing framework. This enables you to test remotely from freshly spawned probes eg.
+* services listening to ip & port
+* validity of certificate files
+* validity of certificates by https
+* network connectivity to remote systems
+
+<a href="https://asciinema.org/a/185686?autoplay=1"><img src="https://asciinema.org/a/185686.png" width="836"/></a>
+
+
 ## preparation
 ### install mach
 ```
@@ -33,6 +43,6 @@ mv terraform /usr/local/bin/
 
 ## usage
 ```
-mach execute-serverspec # tf apply & serverspec
+mach test               # tf apply & serverspec
 mach terraform-destroy  # destroy server after test
 ```

@@ -98,7 +98,7 @@
    update! #$ ["curl" "-L" "-o" product
                "https://github.com/DomainDrivenArchitecture/dda-serverspec-crate/releases/download/1.0.5/dda-serverspec-crate-1.0.5-standalone.jar"]}
 
- execute-serverspec
+ test
   {depends [prepare-serverspec generate-pallet-targets terraform-apply prepare-pallet-build-dir]
    update! #$ ["java" "-jar" (str dda-pallet-build-dir "/serverspec.jar")
                        "-t" (str dda-pallet-build-dir "/targets.edn")
