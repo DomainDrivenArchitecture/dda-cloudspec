@@ -27,9 +27,9 @@ unzip terraform_0.11.7_linux_amd64.zip
 mv terraform /usr/local/bin/
 ```
 
-### configure your ssh-key-on-aws
-1. Add your key in main/terraform/key_pair.tf
-2. Configure your key in main/terraform/instance.tf
+### precondition
+1. you should have ssh-client installed an a public ssh-key avail at ~/.ssh/id_rsa.pub
+2. Your aws credentials should be configured
 
 ## usage
 ```
