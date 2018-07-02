@@ -12,8 +12,10 @@ dda-cloudpec can test whole infrastructures, clouds and networks. It provides a 
 
 <a href="https://asciinema.org/a/185686?autoplay=1"><img src="https://asciinema.org/a/185686.png" width="836"/></a>
 
+## Blog
+Find a detailed setup howto here: https://domaindrivenarchitecture.org/posts/2018-06-24-dda-cloudspec/
 
-## preparation
+## Setup in short
 ### install mach
 ```
 sudo apt-get install npm
@@ -46,3 +48,6 @@ mv terraform /usr/local/bin/
 mach test               # tf apply & serverspec
 mach terraform-destroy  # destroy server after test
 ```
+
+## License
+Published under [apache2.0 license](LICENSE.md)
