@@ -40,7 +40,7 @@ mv terraform /usr/local/bin/
 ```
 
 ### precondition
-1. you should have ssh-client installed an a public ssh-key avail at ~/.ssh/id_rsa.pub
+1. you should have ssh-client installed and a public ssh-key avail at ~/.ssh/id_rsa.pub
 2. Your aws credentials should be configured
 
 ## usage
