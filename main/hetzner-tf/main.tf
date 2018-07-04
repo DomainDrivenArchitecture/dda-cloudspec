@@ -14,7 +14,7 @@ resource "hcloud_ssh_key" "developer_ssh_key" {
 
 resource "hcloud_server" "instance" {
   name        = "cloudspec-test"
-  image       = "ubuntu-18.04"
+  image       = "ubuntu-16.04"
   server_type = "cx11"
   ssh_keys    = ["${hcloud_ssh_key.developer_ssh_key.id}"]
 }

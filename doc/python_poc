@@ -1,0 +1,7 @@
+sudo apt-get install python3-pip
+sudo pip3 install python-terraform
+
+source ~/.hetzner/credentials
+terraform plan -var "api_token=$API_TOKEN"
+terraform apply -var "api_token=$API_TOKEN" -auto-approve
+terraform destroy -var "api_token=$API_TOKEN" -auto-approve

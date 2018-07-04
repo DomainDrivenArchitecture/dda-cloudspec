@@ -1,5 +1,6 @@
 pom.xml
 pom.xml.asc
+**/proposed_apply.plan
 *.jar
 *.class
 /lib/
